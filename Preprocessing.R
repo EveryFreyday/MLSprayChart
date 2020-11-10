@@ -23,5 +23,4 @@ library(baseballr)
 #general graphing 
 library(ggplot2)
 
-
 #this is a test
