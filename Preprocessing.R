@@ -14,13 +14,51 @@
 # The libraries I will use
 
 # Analysis
-# Another resource https://www.ubuntupit.com/best-r-machine-learning-packages/
-library(dplyr)
+#Matt Frey
+#Pull data for Hit location model (hc_x and hc_y)
 
-# This should have a majority of the data I need, as well as plotting functions (baseball fields rather than ugly cartesian graphs.)
 library(baseballr)
+library(tidyverse)
+library(openxlsx)
+library(dplyr)
+library(statcastr)
 
-#general graphing 
-library(ggplot2)
+devtools::install_github("BillPetti/baseballr")
 
-#this is a test
+#
+# Pull data
+#
+
+# Use this to look up the player you would like to generate a spary chart on, then forecast their hits.
+# playerid_lookup("Votto")
+
+player <- scrape_statcast_savant(start_date = "2008-03-25", 
+                                 end_date = "2020-09-27", 
+                                 playerid = 458015,
+                                 player_type = "batter")
+
+# Run this to collapse the dataset to just have these variables
+keep <- player[c("game_date", "player_name", "events", "hc_x","hc_y")]
+
+write.xlsx(keep, "/Users/mattfrey/downloads")
+
+# generate player's spray chart for 2020
+
+#creat variable which is a vector of colors
+values=c("#CC0000", "#006600", "#669999", "#00CCCC", 
+         "#660099", "#CC0066", "#FF9999", "#FF9900", 
+         "black", "black", "black", "black", "black")
+
+ggspraychart(
+  keep,
+  x_value = "hc_x",
+  y_value = "-hc_y",
+  fill_value = "events",
+  fill_palette = values,
+  fill_legend_title = NULL,
+  density = FALSE,
+  bin_size = 15,
+  point_alpha = 0.75,
+  point_size = 2,
+  frame = NULL
+) + ggtitle(keep$player_name)
