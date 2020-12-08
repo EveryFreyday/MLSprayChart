@@ -23,7 +23,7 @@ library(openxlsx)
 library(dplyr)
 library(statcastr)
 
-devtools::install_github("BillPetti/baseballr")
+# devtools::install_github("BillPetti/baseballr")
 
 #
 # Pull data
