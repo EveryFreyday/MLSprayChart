@@ -4,6 +4,18 @@
 
 # Exploratory Analysis
 
+library(dplyr)
+library(ggplot2)
+library(caTools)
+library(corrgram)
+library(readr)
+library(MASS)
+
+# Read in data
+rawclean <- read_csv("~/MLSprayChart/rawclean.csv")
+
+keep <- rawclean[c("hc_x","hc_y")]
+
 # generate player's spray chart for 2020
 
 #creat variable which is a vector of colors
@@ -29,5 +41,9 @@ ggspraychart(
 
 set.seed(42)
 
+#Split data
+sampleSplit <- sample.split(Y=keep$hc_x, SplitRatio=0.7)
+trainSet <- subset(x=keep, sampleSplit==TRUE)
+testSet <- subset(x=keep, sampleSplit==FALSE)
 
-
+model <- lm(keep$hc_x ~. , data=trainSet)
